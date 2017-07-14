@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<!-- 指定spring配置文件 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:applicationContext.xml
+		</param-value>
+	</context-param>
+
+	<!-- webService beging -->
+	<servlet>
+		<servlet-name>AxisServlet</servlet-name>
+		<servlet-class>org.apache.axis2.transport.http.AxisServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AxisServlet</servlet-name>
+		<url-pattern>/servlet/AxisServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AxisServlet</servlet-name>
+		<url-pattern>*.jws</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AxisServlet</servlet-name>
+		<url-pattern>/services/*</url-pattern>
+	</servlet-mapping>
+	<!-- webService end -->
+	<!-- 数据接口 begin -->
+	<servlet>
+		<servlet-name>dataAPI</servlet-name>
+		<servlet-class>com.dlibs.api.servlet.DataAPIServlet</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>dataAPI</servlet-name>
+		<url-pattern>/dataAPI</url-pattern>
+	</servlet-mapping>
+	<!-- 数据接口 end -->
+	<!--  问题 -->
+	<filter>
+		 <filter-name>characterEncodingFilter</filter-name>  
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>  
+        <init-param>  
+            <param-name>encoding</param-name>  
+            <param-value>UTF-8</param-value>  
+        </init-param>  
+        <init-param>  
+            <param-name>forceEncoding</param-name>  
+            <param-value>true</param-value>  
+        </init-param>  
+    </filter>  
+    <filter-mapping>  
+        <filter-name>characterEncodingFilter</filter-name>  
+        <url-pattern>/*</url-pattern>  
+    </filter-mapping>  
+    
+	<!-- 页面session -->
+	<filter>
+		<filter-name>osivFilter</filter-name>
+		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+	</filter>
+	<!-- 页面session -->
+
+	<filter-mapping>
+		<filter-name>osivFilter</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>osivFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>osivFilter</filter-name>
+		<url-pattern>*.htm</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>osivFilter</filter-name>
+		<url-pattern>*.jspa</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>osivFilter</filter-name>
+		<url-pattern>*.jspx</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>osivFilter</filter-name>
+		<url-pattern>*.php</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>osivFilter</filter-name>
+		<url-pattern>*.asp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>osivFilter</filter-name>
+		<url-pattern>*.aspx</url-pattern>
+	</filter-mapping>
+
+	<!-- 权限管理  begin -->
+	<filter>
+		<filter-name>adminAccessControl</filter-name>
+		<filter-class>com.dlibs.core.web.AccessControlFilter</filter-class>
+		<init-param>
+			<param-name>isControl</param-name>
+			<param-value>false</param-value>
+			<!--
+				false:不控制权限 添加权限后要对比系统中备份的权限sql文件，把新加的权限路径加到备份文件中。
+				备份文件路径：/DLibsCloud/WebRoot/function_sql/CORE_FUNCTION.sql
+			-->
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>adminAccessControl</filter-name>
+		<url-pattern>/admin/*</url-pattern>
+	</filter-mapping>
+	<!-- 权限管理  end -->
+
+	<!--  打印前台访问路径 -->
+	<filter>
+		<filter-name>frontFilter</filter-name>
+		<filter-class>com.dlibs.core.web.FrontFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>frontFilter</filter-name>
+		<url-pattern>/front/*</url-pattern>
+	</filter-mapping>
+
+	<!-- struts2过滤器 -->
+	<filter>
+		<filter-name>struts2</filter-name>
+		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>*.htm</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>*.jspa</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>*.jspx</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>*.php</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>*.asp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>*.aspx</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>/services/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 界面登录验证码 -->
+	<servlet>
+		<servlet-name>jcaptcha</servlet-name>
+		<servlet-class>com.dlibs.core.action.login.ImageCaptchaServlet</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>jcaptcha</servlet-name>
+		<url-pattern>/jcaptcha</url-pattern>
+	</servlet-mapping>
+
+	<!-- spring容器实例化，声明spring的监听器-->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener> 
+
+	<!-- 系统信息，如tomcat项目路径 -->
+	<listener>
+		<listener-class>com.dlibs.common.listener.ComtextListener</listener-class>
+	</listener>
+
+	<!-- 数据重建-汇总结果数据， ResultDate 定时任务 -->
+	<listener>
+		<listener-class>com.dlibs.common.timer.RebuildYesterdayResultDataListener</listener-class>
+	</listener>
+	
+	<!-- 
+	 数据重建-当天实时结果数据，ResultDate 定时任务-->
+	<listener>
+		<listener-class>com.dlibs.common.timer.RebuildTimeResultDataListener</listener-class>
+	</listener>
+	 
+	 
+	<!--  数据重建-当天实时数据 TimeDate 定时任务-->
+	<listener>
+		<listener-class>com.dlibs.common.timer.RebuildTimeDataListener</listener-class>
+	</listener>
+ 	
+ 	
+ 	 <!-- 定时清除结果数据缓存 定时任务。 这个任务一般情况不要打开。
+ 	 	    只有部署两个tomcat，一个负责重建数据，一个负责提供接口，在提供接口的tomcat中打开该任务
+	<listener>
+		<listener-class>com.dlibs.common.timer.ClearResultCacheListener</listener-class>
+	</listener>-->
+ 	
+ 	 <!-- 定时清除废弃数据，一般删除3天前数据 定时任务-->
+	<listener>
+		<listener-class>com.dlibs.common.timer.DeleteTimeOutDataListener</listener-class>
+	</listener>
+ 	
+	<error-page>
+		<error-code>500</error-code>
+		<location>/500.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/404.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/403.jsp</location>
+	</error-page>
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
